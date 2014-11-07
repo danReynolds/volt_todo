@@ -1,0 +1,42 @@
+<!-- instead of http requests for client to talk to server, volt has a constant connection -->
+<!-- when a value is changed, client relays to server which distributes to all connected clients -->
+<:Title>
+  Todos
+
+<:Body>
+	<div class = "row">
+	   <div class = "col-md-4">
+      <h1>{{ _todos.size }} Todo List</h1>
+
+      <table class="table">
+        {{ _todos.each do |todo| }}
+        <!-- Use params to store the current index -->
+        <tr
+          e-click="params._index = index"
+          class="{{ if params._index.or(0).to_i == index }}selected{{ end }}"
+        >
+          <td><input type="checkbox" checked="{{ todo._completed }}" /></td>
+          <td class="{{ if todo._completed }}complete{{ end }}">{{ todo._name }}</td>
+          <td><button e-click="remove_todo(todo)">X</button></td>
+        </tr>
+        {{ end }}
+      </table>
+
+      <form e-submit="add_todo" role="form">
+        <div class="form-group">
+          <label>Todo</label>
+          <input class="form-control" type="text" value="{{ page._todo }}" />
+          <!-- Any value bound in the view will be updated automatically when modified -->
+        </div>
+      </form>
+    </div>
+
+    <!-- Display extra info -->
+    <div class = "col-md-8">
+      {{ if current_todo }}
+      <h2>{{ current_todo._name }}</h2>
+
+      <textarea>{{ current_todo.description }}</textarea>
+      {{ end }}
+    </div>
+  </div>
